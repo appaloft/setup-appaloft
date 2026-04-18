@@ -1,0 +1,38 @@
+name: Setup Appaloft
+description: Install the Appaloft CLI in GitHub Actions.
+author: Appaloft
+
+branding:
+  icon: upload-cloud
+  color: blue
+
+inputs:
+  version:
+    description: Appaloft CLI version to install. Use latest to follow the npm latest dist-tag.
+    required: false
+    default: latest
+  package:
+    description: npm package that provides the Appaloft CLI.
+    required: false
+    default: "@appaloft/cli"
+  registry-url:
+    description: npm registry URL.
+    required: false
+    default: https://registry.npmjs.org
+
+outputs:
+  appaloft-path:
+    description: Absolute path to the installed appaloft executable.
+    value: ${{ steps.install.outputs.appaloft-path }}
+
+runs:
+  using: composite
+  steps:
+    - name: Install Appaloft CLI
+      id: install
+      shell: bash
+      run: "$GITHUB_ACTION_PATH/install.sh"
+      env:
+        INPUT_VERSION: ${{ inputs.version }}
+        INPUT_PACKAGE: ${{ inputs.package }}
+        INPUT_REGISTRY_URL: ${{ inputs.registry-url }}
